@@ -3,7 +3,7 @@ CC=g++
 
 
 INCLUDES= -I${MOTORCAR_DIR}/src/compositor -I${MOTORCAR_DIR}/src/protocol -I${MOTORCAR_DIR}/src/device
-LIBS= -L${MOTORCAR_DIR}/lib -lmotorcar-compositor 
+LIBS= -L${MOTORCAR_DIR}/lib -lmotorcar-compositor `pkg-config --libs Qt5Network Qt5Quick Qt5Widgets` #-lQt5Widgets -lQt5Gui -lQt5Core
 CFLAGS=-std=c++11 
 objects=oculushmd.o sixensemotionsensingsystem.o sixensecontrollernode.o sixensebasenode.o 
 
