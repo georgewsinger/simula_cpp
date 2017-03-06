@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+cd "$(dirname ${BASH_SOURCE[0]})"
+LD_LIBRARY_PATH="$PWD/dependencies/build/qt5/lib/"
+
 function check_error {
 	if [ "$1" -ne 0 ]; then exit 1; fi
 
