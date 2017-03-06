@@ -64,10 +64,10 @@ function build-qtwayland {
 	fi
 
 	cd $QT_SRC_DIR
-	make -j4
+	make -j$(nproc)
 	check_error $?
 
-    make -j4 install
+    make -j$(nproc) install
     check_error $?
 }
 
@@ -78,7 +78,7 @@ function build-libmotorcar-compositor {
 	check_error $?
     make clean
 	check_error $?
-    make
+    make -j$(nproc)
 	check_error $?
 }
 
@@ -131,7 +131,7 @@ function build-rift-hydra-compositor {
 	check_error $?
 	make clean
 	check_error $?
-	make  LIBOVRPATH=$OVR_SDK_DIR/LibOVR SIXENSEPATH=$SIXENSE_SDK_DIR
+	make -j$(nproc)  LIBOVRPATH=$OVR_SDK_DIR/LibOVR SIXENSEPATH=$SIXENSE_SDK_DIR
 	check_error $?
 
 	cd $MOTORCAR_DIR
@@ -150,7 +150,7 @@ function build-simple-compositor {
 	check_error $?
 	make clean
 	check_error $?
-	make 
+	make -j$(nproc)
 	check_error $?
 
 	cd $MOTORCAR_DIR
@@ -166,7 +166,7 @@ function build-motorcar-demo-client {
    	DEMO_CLIENT_DIR="$MOTORCAR_DIR/src/examples/clients/simple-egl"
    	cd $DEMO_CLIENT_DIR
 	check_error $?
-	make 
+	make -j$(nproc)
 	check_error $?
 
 	cd $MOTORCAR_DIR
