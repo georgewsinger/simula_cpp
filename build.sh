@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
 cd "$(dirname ${BASH_SOURCE[0]})"
-LD_LIBRARY_PATH="$PWD/dependencies/build/qt5/lib/"
+
+# make sure we *really* link to the right qt libraries
+export LD_LIBRARY_PATH="$PWD/dependencies/build/qt5/lib/"
+
+#the Makefiles already set -L...
+#if they didn't we'd use this
+#export LIBRARY_PATH="$PWD/dependencies/build/qt5/lib/"
+#export PKG_CONFIG_PATH="$PWD/dependencies/build/qt5/lib/pkgconfig"
 
 function check_error {
 	if [ "$1" -ne 0 ]; then exit 1; fi
