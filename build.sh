@@ -172,6 +172,24 @@ function build-simple-compositor {
 
 }
 
+function build-osvr-compositor {
+    echo "building simple-compositor"
+    OSVR_COMPOSITOR_DIR="$MOTORCAR_DIR/src/examples/compositors/osvr-compositor"
+	cd $OSVR_COMPOSITOR_DIR
+	check_error $?
+	make clean
+	check_error $?
+	make -j$(nproc)
+	check_error $?
+
+	cd $MOTORCAR_DIR
+	OSVR_COMPOSITOR_SCRIPT="$MOTORCAR_DIR/run-osvr-compositor.sh"
+	echo "#!/usr/bin/env bash" > $OSVR_COMPOSITOR_SCRIPT
+	echo "LD_LIBRARY_PATH=$MOTORCAR_DIR/lib:$LD_LIBRARY_PATH $OSVR_COMPOSITOR_DIR/osvr-compositor" > $OSVR_COMPOSITOR_SCRIPT
+	chmod ug+x $OSVR_COMPOSITOR_SCRIPT
+
+}
+
 function build-motorcar-demo-client {
     echo "building motorcar-demo-client"
    	DEMO_CLIENT_DIR="$MOTORCAR_DIR/src/examples/clients/simple-egl"
@@ -219,12 +237,15 @@ do
         simple-compositor)
 			build-simple-compositor
             ;;
+        osvr-compositor)
+			build-osvr-compositor
+            ;;
         motorcar-demo-client)
 			build-motorcar-demo-client
 			;;
         *)
 			echo "Invalid target: $arg"
-			echo "This script accepts the following targets: qtwayland libmotorcar-compositor rift-hydra-compositor simple-compositor motorcar-demo-client"
+			echo "This script accepts the following targets: qtwayland libmotorcar-compositor rift-hydra-compositor simple-compositor osvr-compositor motorcar-demo-client"
             echo "Usage: $0 [target1 [target2 [...]]]"
             exit 1
             ;;
