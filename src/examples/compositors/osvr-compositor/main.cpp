@@ -39,10 +39,12 @@
 ****************************************************************************/
 
 #include <motorcar.h>
-
+#include <osvr_hmd.h>
 
 int main(int argc, char *argv[])
 {
+
+
 
     motorcar::Scene *scene = new motorcar::Scene();
 
@@ -55,6 +57,7 @@ int main(int argc, char *argv[])
 
     motorcar::Skeleton *skeleton = new motorcar::Skeleton(scene);
 
+    motorcar::OsvrHMD *hmd = new motorcar::OsvrHMD(skeleton, context, scene);
    
     std::cout << "Using Default Display" << std::endl;
     float camToDisplayDistance = 0.1f;
