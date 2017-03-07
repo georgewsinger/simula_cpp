@@ -48,6 +48,7 @@ void OsvrHMD::prepareForDraw()
     OSVR_ReturnCode ret = osvrGetPoseState(head.get(), &timestamp, &state);
     if (OSVR_RETURN_SUCCESS != ret) {
         std::cout << "No pose state!" << std::endl;
+        return;
     } else {
         std::cout << "Got POSE state: Position = ("
                   << state.translation.data[0] << ", "
@@ -91,34 +92,55 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 
 	head = osvrcontext.getInterface("/me/head");
 
-    osvrcontext.update();
+    //TODO: Proper condition
+	if (head.notEmpty()) {
+		printf("detected %d hmds\n", 1);
+	} else {
+		printf("detected %d hmds\n", 0);
+		return;
+	}
 
-    OSVR_ReturnCode ret = osvrGetPoseState(head.get(), &timestamp, &state);
-    if (OSVR_RETURN_SUCCESS != ret) {
-        std::cout << "No pose state!" << std::endl;
-    } else {
-        std::cout << "Got POSE state: Position = ("
-                  << state.translation.data[0] << ", "
-                  << state.translation.data[1] << ", "
-                  << state.translation.data[2] << "), orientation = ("
-                  << osvrQuatGetW(&(state.rotation)) << ", ("
-                  << osvrQuatGetX(&(state.rotation)) << ", "
-                  << osvrQuatGetY(&(state.rotation)) << ", "
-                  << osvrQuatGetZ(&(state.rotation)) << ")"
-                  << std::endl;
-    }
-
-    int win_width, win_height;
-    int fb_width, fb_height;
-
-	printf("detected %d hmds\n", -1);
-
+	osvr::clientkit::DisplayConfig display;
+	do {
+		std::cout << "Trying to get the display config" << std::endl;
+		osvrcontext.update();
+		display = osvr::clientkit::DisplayConfig(osvrcontext);
+	} while (!display.valid());
 
 
 	/*
-	//TODO: fill in
+    display.forEachViewer([](osvr::clientkit::Viewer viewer){
+        std::cout << "Viewer " << viewer.getViewerID() << "\n";
+        viewer.forEachEye([](osvr::clientkit::Eye eye) {
+            std::cout << "\tEye " << int(eye.getEyeID()) << "\n";
+            eye.forEachSurface([](osvr::clientkit::Surface surface) {
+                std::cout << "\t\tSurface " << surface.getSurfaceID() << "\n";
+            });
+        });
+    });
+    */
+
+    osvr::clientkit::DisplayDimensions dimensions;
+    dimensions = display.getDisplayDimensions(0);
+    //std::cout << "Display: " << dimensions.width << "x" << dimensions.height << std::endl;
+
+	int win_width = dimensions.width, win_height = dimensions.height;
+	printf("Reported hmd size: %d, %d. Default Framebuffer size: %d, %d\n",win_width, win_height, glContext->defaultFramebufferSize().x, glContext->defaultFramebufferSize().y );
+
+	//TODO:
+	int fb_width = win_width / 2, fb_height = win_height;
+	setRenderTargetSize(glm::ivec2(fb_width, fb_height));
+
 	glm::vec4 normalizedViewportParams = glm::vec4( 1,1,1,1);
 	float near = .01f, far = 10.0f;
+
+	RenderToTextureDisplay::DistortionMesh distortionMeshes[2];
+	//TODO: distortion mesh
+	//segfaults with no mesh set
+	//setDistortionMesh(distortionMeshes);
+
+	/*
+	//TODO: fill in
 
 	glm::vec3 HmdToEyeViewOffset = -1.0f * glm::vec3(1,
 												1,

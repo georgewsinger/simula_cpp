@@ -42,6 +42,7 @@
 #include <osvr/ClientKit/Context.h>
 #include <osvr/ClientKit/Interface.h>
 #include <osvr/ClientKit/InterfaceStateC.h>
+#include <osvr/ClientKit/Display.h>
 
 #include <glm/gtc/quaternion.hpp>
 
