@@ -57,16 +57,30 @@ int main(int argc, char *argv[])
 
     motorcar::Skeleton *skeleton = new motorcar::Skeleton(scene);
 
+    float vertices[]= {
+        -5.f, 0.0f, 0.0f,
+        5.f, 0.0f, 0.0f,
+        0.0f, -5.f, 0.0f,
+        0.0f, 5.f, 0.0f,
+        0.0f, 0.0f, -5.0f,
+        0.0f, 0.0f, 5.f,
+
+
+    };
+    new motorcar::WireframeNode(vertices, 3, glm::vec3(1, 0, 0), scene, glm::translate(glm::mat4(0.01), glm::vec3(0,-1,-1)));
+
+    std::cout << "Using OSVR HMD Display" << std::endl;
     motorcar::OsvrHMD *hmd = new motorcar::OsvrHMD(skeleton, context, scene);
     compositor->setDisplay(hmd);
+    scene->addDisplay(hmd);
 
-    std::cout << "Using Default Display" << std::endl;
-    float camToDisplayDistance = 0.1f;
-    motorcar::Display *display = new motorcar::Display(context, glm::vec2(0.325f, 0.1f), scene, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 1.25f))
-                                                       * glm::rotate(glm::mat4(1.0f), glm::radians(-25.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-    display->addViewpoint(new motorcar::ViewPoint( .01f, 100.0f, display, display, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, camToDisplayDistance))));
-    compositor->setDisplay(display);
-    scene->addDisplay(compositor->display());
+    //std::cout << "Using Default Display" << std::endl;
+    //float camToDisplayDistance = 0.1f;
+    //motorcar::Display *display = new motorcar::Display(context, glm::vec2(0.325f, 0.1f), scene, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 1.25f))
+    //                                                   * glm::rotate(glm::mat4(1.0f), glm::radians(-25.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+    //display->addViewpoint(new motorcar::ViewPoint( .01f, 100.0f, display, display, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, camToDisplayDistance))));
+    //compositor->setDisplay(display);
+    //scene->addDisplay(compositor->display());
 
 
     std::cout << "Starting OSVR Compositor "<<std::endl;
