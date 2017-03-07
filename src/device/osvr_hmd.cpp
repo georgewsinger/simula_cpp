@@ -34,10 +34,6 @@
 ****************************************************************************/
 #include "osvr_hmd.h"
 
-#include <osvr/ClientKit/Context.h>
-#include <osvr/ClientKit/Interface.h>
-#include <osvr/ClientKit/InterfaceStateC.h>
-
 using namespace motorcar;
 
 void OsvrHMD::prepareForDraw()
@@ -46,14 +42,32 @@ void OsvrHMD::prepareForDraw()
     RenderToTextureDisplay::prepareForDraw();
 
 
+    osvrcontext.update();
+    OSVR_PoseState state;
+    OSVR_TimeValue timestamp;
+    OSVR_ReturnCode ret = osvrGetPoseState(head.get(), &timestamp, &state);
+    if (OSVR_RETURN_SUCCESS != ret) {
+        std::cout << "No pose state!" << std::endl;
+    } else {
+        std::cout << "Got POSE state: Position = ("
+                  << state.translation.data[0] << ", "
+                  << state.translation.data[1] << ", "
+                  << state.translation.data[2] << "), orientation = ("
+                  << osvrQuatGetW(&(state.rotation)) << ", ("
+                  << osvrQuatGetX(&(state.rotation)) << ", "
+                  << osvrQuatGetY(&(state.rotation)) << ", "
+                  << osvrQuatGetZ(&(state.rotation)) << ")"
+                  << std::endl;
+    }
 
-    //TODO: Get OSVR orientation + position
-    /*
-	glm::vec3 position = glm::vec3(pose.Position.x, pose.Position.y, pose.Position.z);
-    glm::quat orientation = glm::make_quat(&pose.Orientation.x);
+	glm::vec3 position = glm::vec3(state.translation.data[0], state.translation.data[1], state.translation.data[2]);
+    glm::quat orientation;
+    orientation.x = osvrQuatGetW(&(state.rotation));
+    orientation.y = osvrQuatGetW(&(state.rotation));
+    orientation.z = osvrQuatGetW(&(state.rotation));
+    orientation.w = osvrQuatGetW(&(state.rotation));
     glm::mat4 transform = glm::translate(glm::mat4(), position) * glm::mat4_cast(orientation);
     this->setTransform(transform);
-    */
 
 }
 
@@ -69,16 +83,16 @@ void OsvrHMD::finishDraw()
 
 OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *parent)
     :RenderToTextureDisplay(glContext, glm::vec2(0.126, 0.0706), parent, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.10f)))
-    , m_initialized(false)
+    , m_initialized(true)
     , m_frameIndex(0)
+	, osvrcontext("com.motorcar")
 {
     
-    osvr::clientkit::ClientContext osvrcontext("com.motorcar");
-    osvr::clientkit::Interface head = osvrcontext.getInterface("/me/head");
+
+	head = osvrcontext.getInterface("/me/head");
 
     osvrcontext.update();
-    OSVR_PoseState state;
-    OSVR_TimeValue timestamp;
+
     OSVR_ReturnCode ret = osvrGetPoseState(head.get(), &timestamp, &state);
     if (OSVR_RETURN_SUCCESS != ret) {
         std::cout << "No pose state!" << std::endl;
@@ -100,6 +114,21 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 	printf("detected %d hmds\n", -1);
 
 
+
+	/*
+	//TODO: fill in
+	glm::vec4 normalizedViewportParams = glm::vec4( 1,1,1,1);
+	float near = .01f, far = 10.0f;
+
+	glm::vec3 HmdToEyeViewOffset = -1.0f * glm::vec3(1,
+												1,
+												1 );
+
+	ViewPoint *vp = new ViewPoint(near, far, this, this,
+                                 glm::translate(glm::mat4(), HmdToEyeViewOffset),
+                                 normalizedViewportParams, glm::vec3(0));
+	addViewpoint(vp);
+	*/
 }
 
 

@@ -39,7 +39,9 @@
 #include <scenegraph/output/display/rendertotexturedisplay.h>
 #include <scenegraph/input/singlebonetracker.h>
 
-
+#include <osvr/ClientKit/Context.h>
+#include <osvr/ClientKit/Interface.h>
+#include <osvr/ClientKit/InterfaceStateC.h>
 
 #include <glm/gtc/quaternion.hpp>
 
@@ -66,6 +68,10 @@ private:
 
     unsigned int m_frameIndex;
 
+    osvr::clientkit::ClientContext osvrcontext;
+    osvr::clientkit::Interface head;
+    OSVR_PoseState state;
+    OSVR_TimeValue timestamp;
 };
 }
 
