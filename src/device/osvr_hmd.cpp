@@ -128,7 +128,7 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 	printf("Reported hmd size: %d, %d. Default Framebuffer size: %d, %d\n",win_width, win_height, glContext->defaultFramebufferSize().x, glContext->defaultFramebufferSize().y );
 
 	//TODO:
-	int fb_width = win_width / 2, fb_height = win_height;
+	int fb_width = win_width, fb_height = win_height;
 	setRenderTargetSize(glm::ivec2(fb_width, fb_height));
 
 	glm::vec4 normalizedViewportParams = glm::vec4( 1,1,1,1);
