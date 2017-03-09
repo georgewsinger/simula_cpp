@@ -87,8 +87,8 @@ function build-libmotorcar-compositor {
     cd $MOTORCAR_DIR
     $BUILD_DIR/qt5/bin/qmake
 	check_error $?
-    make clean
-	check_error $?
+    #make clean
+	#check_error $?
     make -j$(nproc)
 	check_error $?
 }
@@ -159,8 +159,8 @@ function build-simple-compositor {
     SIMPLE_COMPOSITOR_DIR="$MOTORCAR_DIR/src/examples/compositors/simple-compositor"
 	cd $SIMPLE_COMPOSITOR_DIR
 	check_error $?
-	make clean
-	check_error $?
+	#make clean
+	#check_error $?
 	make -j$(nproc)
 	check_error $?
 
@@ -177,8 +177,8 @@ function build-osvr-compositor {
     OSVR_COMPOSITOR_DIR="$MOTORCAR_DIR/src/examples/compositors/osvr-compositor"
 	cd $OSVR_COMPOSITOR_DIR
 	check_error $?
-	make clean
-	check_error $?
+	#make clean
+	#check_error $?
 	make -j$(nproc)
 	check_error $?
 
