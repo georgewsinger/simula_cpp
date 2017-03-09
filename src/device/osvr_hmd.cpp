@@ -63,9 +63,9 @@ void OsvrHMD::prepareForDraw()
 
 	glm::vec3 position = glm::vec3(state.translation.data[0], state.translation.data[1], state.translation.data[2]);
     glm::quat orientation;
-    orientation.x = osvrQuatGetW(&(state.rotation));
-    orientation.y = osvrQuatGetW(&(state.rotation));
-    orientation.z = osvrQuatGetW(&(state.rotation));
+    orientation.x = osvrQuatGetX(&(state.rotation));
+    orientation.y = osvrQuatGetY(&(state.rotation));
+    orientation.z = osvrQuatGetZ(&(state.rotation));
     orientation.w = osvrQuatGetW(&(state.rotation));
     glm::mat4 transform = glm::translate(glm::mat4(), position) * glm::mat4_cast(orientation);
     this->setTransform(transform);
