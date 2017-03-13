@@ -39,7 +39,7 @@ using namespace motorcar;
 void OsvrHMD::prepareForDraw()
 {
 
-    Display::prepareForDraw();
+    OSVRDisplay::prepareForDraw();
 
 
     osvrcontext.update();
@@ -75,7 +75,7 @@ void OsvrHMD::prepareForDraw()
 
 void OsvrHMD::finishDraw()
 {
-	Display::finishDraw();
+	OSVRDisplay::finishDraw();
 
 	m_frameIndex++;
 
@@ -83,7 +83,7 @@ void OsvrHMD::finishDraw()
 
 
 OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *parent)
-    : Display(glContext, glm::vec2(0.126, 0.0706), parent, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.10f)))
+    : OSVRDisplay(glContext, glm::vec2(0.126, 0.0706), parent, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.10f)))
     , m_initialized(true)
     , m_frameIndex(0)
 	, osvrcontext("com.motorcar")

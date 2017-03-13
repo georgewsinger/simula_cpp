@@ -75,6 +75,7 @@ HEADERS += \
     src/compositor/gl/openglcontext.h \
     src/compositor/qt/qtwaylandmotorcaropenglcontext.h \
     src/compositor/scenegraph/output/display/display.h \
+    src/compositor/scenegraph/output/display/osvrdisplay.h \
     src/compositor/scenegraph/output/display/rendertotexturedisplay.h \
     src/compositor/scenegraph/output/wireframenode.h \
     src/compositor/compositor.h \
@@ -127,6 +128,7 @@ SOURCES += \
     src/compositor/gl/openglcontext.cpp \
     src/compositor/qt/qtwaylandmotorcaropenglcontext.cpp \
     src/compositor/scenegraph/output/display/display.cpp \
+    src/compositor/scenegraph/output/display/osvrdisplay.cpp \
     src/compositor/scenegraph/output/display/rendertotexturedisplay.cpp \
     src/compositor/scenegraph/output/wireframenode.cpp \
     src/compositor/compositor.cpp \

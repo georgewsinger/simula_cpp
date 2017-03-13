@@ -2,7 +2,7 @@
 **This file is part of the Motorcar 3D windowing framework
 **
 **
-**Copyright (C) 2015 Forrest Reiling
+**Copyright (C) 2014 Forrest Reiling
 **
 **
 ** You may use this file under the terms of the BSD license as follows:
@@ -32,49 +32,27 @@
 **
 **
 ****************************************************************************/
-
-#ifndef OSVRHMD_H
-#define OSVRHMD_H
-
 #include <scenegraph/output/display/osvrdisplay.h>
-#include <scenegraph/input/singlebonetracker.h>
 
-#include <osvr/ClientKit/Context.h>
-#include <osvr/ClientKit/Interface.h>
-#include <osvr/ClientKit/InterfaceStateC.h>
-#include <osvr/ClientKit/Display.h>
+using namespace motorcar;
 
-#include <glm/gtc/quaternion.hpp>
 
-namespace motorcar {
 
-class OsvrHMD : public OSVRDisplay
+OSVRDisplay::OSVRDisplay(OpenGLContext *glContext, glm::vec2 displayDimensions, PhysicalNode *parent, const glm::mat4 &transform)
+	:Display(glContext, displayDimensions, parent, transform)
+
 {
-public:
-    
-    bool isInitialized(){ return m_initialized;}
 
-    virtual void prepareForDraw() override;
-    virtual void finishDraw() override;
+}
 
-    OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *parent);
-    ~OsvrHMD();
-
-private:
-
-    bool m_initialized;
-    //ovrHmd m_hmd;
-    //ovrVector3f m_hmdToEyeViewOffset[2];
-
-
-    unsigned int m_frameIndex;
-
-    osvr::clientkit::ClientContext osvrcontext;
-    osvr::clientkit::Interface head;
-    OSVR_PoseState state;
-    OSVR_TimeValue timestamp;
-};
+OSVRDisplay::~OSVRDisplay()
+{
+    glDeleteTextures(1, &m_scratchColorBufferTexture);
+    glDeleteTextures(1, &m_scratchDepthBufferTexture);
+    glDeleteFramebuffers(1, &m_scratchFrameBuffer);
 }
 
 
-#endif // OSVRHMD_H
+
+
+
