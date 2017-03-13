@@ -36,7 +36,7 @@
 #ifndef OSVRHMD_H
 #define OSVRHMD_H
 
-#include <scenegraph/output/display/rendertotexturedisplay.h>
+#include <scenegraph/output/display/display.h>
 #include <scenegraph/input/singlebonetracker.h>
 
 #include <osvr/ClientKit/Context.h>
@@ -48,7 +48,7 @@
 
 namespace motorcar {
 
-class OsvrHMD : public RenderToTextureDisplay
+class OsvrHMD : public Display
 {
 public:
     

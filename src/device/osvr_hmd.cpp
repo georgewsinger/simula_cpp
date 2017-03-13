@@ -39,7 +39,7 @@ using namespace motorcar;
 void OsvrHMD::prepareForDraw()
 {
 
-    RenderToTextureDisplay::prepareForDraw();
+    Display::prepareForDraw();
 
 
     osvrcontext.update();
@@ -75,7 +75,7 @@ void OsvrHMD::prepareForDraw()
 
 void OsvrHMD::finishDraw()
 {
-	RenderToTextureDisplay::finishDraw();
+	Display::finishDraw();
 
 	m_frameIndex++;
 
@@ -83,7 +83,7 @@ void OsvrHMD::finishDraw()
 
 
 OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *parent)
-    :RenderToTextureDisplay(glContext, glm::vec2(0.126, 0.0706), parent, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.10f)))
+    : Display(glContext, glm::vec2(0.126, 0.0706), parent, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.10f)))
     , m_initialized(true)
     , m_frameIndex(0)
 	, osvrcontext("com.motorcar")
@@ -107,7 +107,6 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 		display = osvr::clientkit::DisplayConfig(osvrcontext);
 	} while (!display.valid());
 
-
 	/*
     display.forEachViewer([](osvr::clientkit::Viewer viewer){
         std::cout << "Viewer " << viewer.getViewerID() << "\n";
@@ -127,30 +126,12 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 	int win_width = dimensions.width, win_height = dimensions.height;
 	printf("Reported hmd size: %d, %d. Default Framebuffer size: %d, %d\n",win_width, win_height, glContext->defaultFramebufferSize().x, glContext->defaultFramebufferSize().y );
 
-	//TODO:
-	int fb_width = win_width, fb_height = win_height;
-	setRenderTargetSize(glm::ivec2(fb_width, fb_height));
 
-	glm::vec4 normalizedViewportParams = glm::vec4( 1,1,1,1);
-	float near = .01f, far = 10.0f;
-
-	RenderToTextureDisplay::DistortionMesh distortionMeshes[2];
-	//TODO: distortion mesh
-	//segfaults with no mesh set
-	//setDistortionMesh(distortionMeshes);
-
-	/*
-	//TODO: fill in
-
-	glm::vec3 HmdToEyeViewOffset = -1.0f * glm::vec3(1,
-												1,
-												1 );
-
-	ViewPoint *vp = new ViewPoint(near, far, this, this,
-                                 glm::translate(glm::mat4(), HmdToEyeViewOffset),
-                                 normalizedViewportParams, glm::vec3(0));
+    float camToDisplayDistance = 0.1f;
+    ViewPoint *vp = new ViewPoint(.01f, 100.0f, this, this, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, camToDisplayDistance)));
 	addViewpoint(vp);
-	*/
+
+
 }
 
 
