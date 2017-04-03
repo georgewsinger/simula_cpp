@@ -51,7 +51,7 @@ public:
 
     ///Factory method to create compositors with external dependencies
     /*Currently this method returns a QtWaylandMotorcarCompositor */
-    static Compositor *createCompositor(int argc, char **argv, Scene *scene);
+    static Compositor *createCompositor(int &argc, char **argv, Scene *scene);
 
     ///Starts the compositor main draw loop
     /*Starts the compositor and blocks until the compositor (usually another thread) has finished,

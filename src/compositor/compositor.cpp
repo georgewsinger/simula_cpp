@@ -42,7 +42,7 @@ Compositor::~Compositor()
     //delete m_display;
 }
 
-Compositor *Compositor::createCompositor(int argc, char **argv, Scene *scene)
+Compositor *Compositor::createCompositor(int &argc, char **argv, Scene *scene)
 {
     return qtmotorcar::QtWaylandMotorcarCompositor::create(argc, argv, scene);
 }

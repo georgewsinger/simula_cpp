@@ -97,7 +97,7 @@ QtWaylandMotorcarCompositor::~QtWaylandMotorcarCompositor()
     delete m_glData;
 }
 
-QtWaylandMotorcarCompositor *QtWaylandMotorcarCompositor::create(int argc, char** argv, motorcar::Scene *scene)
+QtWaylandMotorcarCompositor *QtWaylandMotorcarCompositor::create(int &argc, char** argv, motorcar::Scene *scene)
 {
     QGuiApplication *app = new QGuiApplication(argc, argv);
     QScreen *screen = NULL;

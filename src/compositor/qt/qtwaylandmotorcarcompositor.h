@@ -72,7 +72,7 @@ public:
     ~QtWaylandMotorcarCompositor();
     QOpenGLWindow *m_window;
 
-    static QtWaylandMotorcarCompositor *create(int argc, char **argv, motorcar::Scene *scene);
+    static QtWaylandMotorcarCompositor *create(int &argc, char **argv, motorcar::Scene *scene);
     virtual int start() override;
 
     QtWaylandMotorcarSurface *getMotorcarSurface(QWaylandSurface *surface = NULL) const;
