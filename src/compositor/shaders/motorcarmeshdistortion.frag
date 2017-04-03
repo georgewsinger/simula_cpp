@@ -17,7 +17,7 @@ std::string shader_motorcarmeshdistortion_frag =
 "   fragColor.r = texture2D(uTexSampler, vTexCoordR).r;\n"
 "   fragColor.g = texture2D(uTexSampler, vTexCoordG).g;\n"
 "   fragColor.b = texture2D(uTexSampler, vTexCoordB).b;\n"
-"	gl_FragColor = vec4(fragColor * vPosition.w, 1);\n"
+"	gl_FragColor = vec4(fragColor * vPosition.w, 1.);\n"
 "}\n";
 
 #endif

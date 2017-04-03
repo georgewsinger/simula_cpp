@@ -8,7 +8,7 @@ std::string shader_depthcompositedsurface_frag =
 "\n"
 "\n"
 "float unpack_depth(vec4 rgba ) {\n"
-"  float depth = dot(rgba, vec4(1.f, 1.f/255.0, 1.f/65025.0, 1.f/160581375.0));\n"
+"  float depth = dot(rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/160581375.0));\n"
 "  depth = (depth==0.0) ? 1.0 : depth;\n"
 "  return depth;\n"
 "}\n"

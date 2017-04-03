@@ -8,7 +8,7 @@ std::string shader_motorcarline_vert =
 "\n"
 "void main(void)\n"
 "{\n"
-"    gl_Position =   uMVPMatrix * vec4(aPosition, 1);\n"
+"    gl_Position =   uMVPMatrix * vec4(aPosition, 1.);\n"
 "}\n";
 
 #endif

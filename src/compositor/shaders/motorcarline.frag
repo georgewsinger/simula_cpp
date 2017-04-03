@@ -7,7 +7,7 @@ std::string shader_motorcarline_frag =
 "\n"
 "void main(void)\n"
 "{\n"
-"    gl_FragColor = vec4(uColor, 1);\n"
+"    gl_FragColor = vec4(uColor, 1.);\n"
 "}\n";
 
 #endif

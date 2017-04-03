@@ -55,7 +55,7 @@ TextureBlitter::TextureBlitter()
             "varying highp vec2 textureCoord;\n"
             "void main() {\n"
             "   textureCoord = textureCoordEntry;\n"
-            "   gl_Position = matrix * vec4(vertexCoordEntry, 1);\n"
+            "   gl_Position = matrix * vec4(vertexCoordEntry, 1.);\n"
             "}\n";
 
     static const char *textureFragmentProgram =

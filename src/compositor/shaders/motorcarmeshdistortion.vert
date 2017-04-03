@@ -26,7 +26,7 @@ std::string shader_motorcarmeshdistortion_vert =
 "   vTexCoordR.y = 1.0 - vTexCoordR.y;\n"
 "   vTexCoordG.y = 1.0 - vTexCoordG.y;\n"
 "   vTexCoordB.y = 1.0 - vTexCoordB.y;\n"
-"   gl_Position = vec4(aPosition.xy, 0, 1);\n"
+"   gl_Position = vec4(aPosition.xy, 0, 1.);\n"
 "}\n";
 
 #endif

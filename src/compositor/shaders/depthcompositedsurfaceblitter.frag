@@ -15,9 +15,9 @@ std::string shader_depthcompositedsurfaceblitter_frag =
 "\n"
 "    gl_FragDepth = depth;\n"
 "\n"
-"    //(depth > 0.999) depth = 0;\n"
+"    //(depth > 0.999) depth = 0.;\n"
 "\n"
-"    gl_FragColor = color; //vec4(0, depth == 1.0f ? 0.0f : depth, min(color.g, 1),  1);\n"
+"    gl_FragColor = color; //vec4(0., depth == 1.0f ? 0.0f : depth, min(color.g, 1.),  1.);\n"
 "\n"
 "}\n";
 

@@ -13,7 +13,7 @@ std::string shader_depthcompositedsurfaceblitter_vert =
 "{\n"
 "    vTexCoord = aTexCoord;\n"
 "\n"
-"    gl_Position =  vec4(aPosition, 1);\n"
+"    gl_Position =  vec4(aPosition, 1.);\n"
 "\n"
 "}\n";
 

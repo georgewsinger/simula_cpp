@@ -11,7 +11,7 @@ std::string shader_softkineticdepthcam_frag =
 "    if(vIsValid < 1.0){\n"
 "        discard;\n"
 "    }\n"
-"    //gl_FragColor = vec4(vTexCoord.x, vTexCoord.y, 0, 1);\n"
+"    //gl_FragColor = vec4(vTexCoord.x, vTexCoord.y, 0., 1.);\n"
 "    gl_FragColor = texture2D(uTexSampler, vTexCoord).bgra;\n"
 "}\n";
 

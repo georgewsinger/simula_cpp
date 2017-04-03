@@ -169,8 +169,8 @@ static const char *vert_shader_text =
 	"attribute vec3 color;\n"
 	"varying vec4 v_color;\n"
 	"void main() {\n"
-	"  gl_Position = rotation * vec4(pos, 1);\n"
-	"  v_color = vec4(color, 1);\n"
+	"  gl_Position = rotation * vec4(pos, 1.);\n"
+	"  v_color = vec4(color, 1.);\n"
 	"}\n";
 
 static const char *frag_shader_text =
@@ -184,7 +184,7 @@ static const char *blit_vert_shader_text =
 	"attribute vec2 aTexCoord;\n"
 	"varying vec2 vTexCoord;\n"
 	"void main() {\n"
-	"  gl_Position = vec4(aPosition, 1);\n"
+	"  gl_Position = vec4(aPosition, 1.);\n"
 	"  vTexCoord = aTexCoord;\n"
 	"}\n";
 
@@ -214,12 +214,12 @@ static const char *clip_vert_shader_text =
 	"attribute vec3 aPosition;\n"
 	"uniform mat4 uMVPMatrix;\n"
 	"void main() {\n"
-	"  gl_Position = uMVPMatrix * vec4(aPosition, 1);\n"
+	"  gl_Position = uMVPMatrix * vec4(aPosition, 1.);\n"
 	"}\n";
 
 static const char *clip_frag_shader_text =
 	"void main() {\n"
-	"  gl_FragColor = vec4(1, 0, 0, 1);\n"
+	"  gl_FragColor = vec4(1., 0., 0., 1.);\n"
 	"}\n";
 
 static int running = 1;

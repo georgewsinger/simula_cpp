@@ -11,7 +11,7 @@ std::string shader_motorcarbarreldistortion_vert =
 "{\n"
 "    //vTexCoord = aTexCoord;\n"
 "    vUDCPos = aPosition.xy;\n"
-"    gl_Position = vec4(aPosition, 1);\n"
+"    gl_Position = vec4(aPosition, 1.);\n"
 "}\n";
 
 #endif

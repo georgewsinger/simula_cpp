@@ -15,7 +15,7 @@ std::string shader_depthcompositedsurface_vert =
 "    vColorTexCoord = aColorTexCoord;\n"
 "    vDepthTexCoord = aDepthTexCoord;\n"
 "\n"
-"    gl_Position =  vec4(aPosition, 1);\n"
+"    gl_Position =  vec4(aPosition, 1.);\n"
 "\n"
 "\n"
 "}\n";
