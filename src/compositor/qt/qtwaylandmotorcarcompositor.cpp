@@ -49,7 +49,7 @@
 #include <QScreen>
 #include <QDateTime>
 #include <QKeyEvent>
-//#include <QMouseEvent>
+#include <QMouseEvent>
 //#include <QTouchEvent>
 
 #include <sys/time.h>
@@ -437,6 +437,34 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
             this->scene()->windowManager()->sendEvent(motorcar::KeyboardEvent(motorcar::KeyboardEvent::Event::KEY_RELEASE, ke->nativeScanCode(), defaultSeat()));
         }
         break;
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseMove: {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+            glm::vec2 pos(me->globalX(), me->globalY());
+
+            // TODO: Should pos be projected onto the 3D surfaces here?
+
+            motorcar::MouseEvent::Event mouseEvent;
+            motorcar::MouseEvent::Button button;
+
+            if(me->type() == QEvent::MouseButtonPress)
+                mouseEvent = motorcar::MouseEvent::Event::BUTTON_PRESS;
+            else if(me->type() == QEvent::MouseButtonRelease)
+                mouseEvent = motorcar::MouseEvent::Event::BUTTON_RELEASE;
+            else if(me->type() == QEvent::MouseMove)
+                mouseEvent = motorcar::MouseEvent::Event::MOVE;
+
+            if(me->button() == Qt::LeftButton)
+                button = motorcar::MouseEvent::Button::LEFT;
+            else if(me->button() == Qt::RightButton)
+                button = motorcar::MouseEvent::Button::RIGHT;
+            else if(me->button() == Qt::MiddleButton)
+                button = motorcar::MouseEvent::Button::MIDDLE;
+
+            this->scene()->windowManager()->sendEvent(motorcar::MouseEvent(mouseEvent, button, pos, defaultSeat()));
+        break;
+        }
 
         default:
         break;
