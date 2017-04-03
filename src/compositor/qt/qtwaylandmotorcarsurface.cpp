@@ -77,7 +77,10 @@ motorcar::WaylandSurface *QtWaylandMotorcarSurface::parentSurface()
 
 void QtWaylandMotorcarSurface::prepare()
 {
-    m_textureID = composeSurface(m_surface, m_compositor->glData());
+    GLuint textureID = composeSurface(m_surface, m_compositor->glData());
+    if(m_textureID && m_textureID != textureID)
+        glDeleteTextures(1, &m_textureID);
+    m_textureID = textureID;
 }
 
 void QtWaylandMotorcarSurface::sendEvent(const motorcar::Event &event)
