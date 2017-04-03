@@ -110,6 +110,8 @@ WaylandSurfaceNode::WaylandSurfaceNode(WaylandSurface *surface, SceneGraphNode *
 WaylandSurfaceNode::~WaylandSurfaceNode()
 {
     std::cout << "deleting surfaceNode: " << this <<std::endl;
+    glDeleteBuffers(1, &m_surfaceTextureCoordinates);
+    glDeleteBuffers(1, &m_surfaceVertexCoordinates);
 }
 
 WaylandSurface *WaylandSurfaceNode::surface() const

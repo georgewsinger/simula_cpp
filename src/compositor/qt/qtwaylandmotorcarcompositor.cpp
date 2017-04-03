@@ -203,6 +203,7 @@ void QtWaylandMotorcarCompositor::surfaceDestroyed()
         if(motorcarsurface != NULL){
             this->scene()->windowManager()->destroySurface(motorcarsurface);
             m_surfaceMap.erase (surface);
+            destroy surface;
         }
     }
 }

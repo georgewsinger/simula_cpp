@@ -47,6 +47,8 @@ public:
 
     WireframeNode(float *segments, int numSegments, glm::vec3 lineColor, SceneGraphNode *parent, const glm::mat4 &transform = glm::mat4());
 
+    ~WireframeNode();
+
     virtual void draw(Scene *scene, Display *display) override;
 
     glm::vec3 lineColor() const;

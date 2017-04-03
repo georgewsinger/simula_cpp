@@ -68,6 +68,11 @@ WireframeNode::WireframeNode(float *segments, int numSegments, glm::vec3 lineCol
 
 }
 
+WireframeNode::~WireframeNode()
+{
+    glDeleteBuffers(1, &m_lineVertexCoordinates);
+}
+
 void WireframeNode::draw(Scene *scene, Display *display)
 {
     glUseProgram(m_lineShader->handle());

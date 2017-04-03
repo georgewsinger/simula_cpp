@@ -56,7 +56,7 @@ class QtWaylandMotorcarSurface : public motorcar::WaylandSurface
 {
 public:
     QtWaylandMotorcarSurface(QWaylandSurface *surface, QtWaylandMotorcarCompositor *compositor, motorcar::WaylandSurface::SurfaceType type);
-    ~QtWaylandMotorcarSurface(){}
+    ~QtWaylandMotorcarSurface();
 
     //  inherited from WaylandSurface
     GLuint texture() override;

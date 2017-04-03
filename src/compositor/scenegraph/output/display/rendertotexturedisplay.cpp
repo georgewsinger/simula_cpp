@@ -74,6 +74,8 @@ RenderToTextureDisplay::~RenderToTextureDisplay()
     for(int i = 0; i < 2; i++){
         free(m_distortionMesh[i].VertexData);
         free(m_distortionMesh[i].IndexData);
+        glDeleteBuffers(1, &m_distortionMesh[i].VertexBuffer);
+        glDeleteBuffers(1, &m_distortionMesh[i].IndexBuffer);
     }
 
 }

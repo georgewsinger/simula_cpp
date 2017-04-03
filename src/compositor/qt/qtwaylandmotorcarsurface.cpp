@@ -41,8 +41,14 @@ QtWaylandMotorcarSurface::QtWaylandMotorcarSurface(QWaylandSurface *surface, QtW
     :motorcar::WaylandSurface(type)
     , m_surface(surface)
     , m_compositor(compositor)
+    , m_textureID(0)
 {
 
+}
+
+QtWaylandMotorcarSurface::~QtWaylandMotorcarSurface()
+{
+    glDeleteTextures(1, &m_textureID);
 }
 
 GLuint QtWaylandMotorcarSurface::texture()

@@ -152,6 +152,15 @@ MotorcarSurfaceNode::MotorcarSurfaceNode(WaylandSurface *surface, SceneGraphNode
 
 }
 
+MotorcarSurfaceNode::~MotorcarSurfaceNode()
+{
+    glDeleteBuffers(1, &m_colorTextureCoordinates);
+    glDeleteBuffers(1, &m_depthTextureCoordinates);
+    glDeleteBuffers(1, &m_surfaceVertexCoordinates);
+    glDeleteBuffers(1, &m_cuboidClippingVertices);
+    glDeleteBuffers(1, &m_cuboidClippingIndices);
+}
+
 bool MotorcarSurfaceNode::computeLocalSurfaceIntersection(const Geometry::Ray &localRay, glm::vec2 &localIntersection, float &t)
 {
 
