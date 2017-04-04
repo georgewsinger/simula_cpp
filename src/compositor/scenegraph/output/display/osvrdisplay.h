@@ -43,15 +43,41 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
+#include <osvr/RenderKit/RenderManager.h>
 
 namespace motorcar {
 class WaylandSurface;
 class OSVRDisplay : public Display
 {
 public:
-	OSVRDisplay(OpenGLContext *glContext, glm::vec2 displayDimensions, PhysicalNode *parent, const glm::mat4 &transform = glm::mat4());
+    OSVRDisplay(OpenGLContext *glContext, glm::vec2 displayDimensions, PhysicalNode *parent, const glm::mat4 &transform = glm::mat4());
     virtual ~OSVRDisplay();
 
+    static bool SetupRendering(osvr::renderkit::GraphicsLibrary library);
+    static void SetupDisplay(
+        void* userData
+        , osvr::renderkit::GraphicsLibrary library
+        , osvr::renderkit::RenderBuffer buffers
+    );
+    static void SetupEye(
+        void* userData
+        , osvr::renderkit::GraphicsLibrary library
+        , osvr::renderkit::RenderBuffer buffers
+        , osvr::renderkit::OSVR_ViewportDescription viewport
+        , osvr::renderkit::OSVR_ProjectionMatrix projectionToUse
+        , size_t whichEye
+    );
+    static void DrawWorld(
+        void* userData
+        , osvr::renderkit::GraphicsLibrary library
+        , osvr::renderkit::RenderBuffer buffers
+        , osvr::renderkit::OSVR_ViewportDescription viewport
+        , OSVR_PoseState pose
+        , osvr::renderkit::OSVR_ProjectionMatrix projection
+        , OSVR_TimeValue deadline
+    );
+
+    //virtual glm::ivec2 size() override;
 private:
 
 

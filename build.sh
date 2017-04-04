@@ -173,7 +173,7 @@ function build-simple-compositor {
 }
 
 function build-osvr-compositor {
-    echo "building simple-compositor"
+    echo "building osvr-compositor"
     OSVR_COMPOSITOR_DIR="$MOTORCAR_DIR/src/examples/compositors/osvr-compositor"
 	cd $OSVR_COMPOSITOR_DIR
 	check_error $?

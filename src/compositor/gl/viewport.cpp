@@ -51,6 +51,15 @@ void ViewPort::set() const
     glViewport(offsetX(), offsetY(), width(), height());
 }
 
+void ViewPort::update(glm::vec2 normalizedPos, glm::vec2 normalizedSize, Geometry::Rectangle *bufferGeometry)
+{
+    m_offsetX = normalizedPos.x;
+    m_offsetY = normalizedPos.y;
+    m_width = normalizedSize.x;
+    m_height = normalizedSize.y;
+    m_bufferGeometry = bufferGeometry;
+}
+
 glm::vec2 ViewPort::displayCoordsToViewportCoords(float pixelX, float pixelY) const
 {
     return glm::vec2(((pixelX - offsetX()) / width() - 0.5f), ((pixelY - offsetY()) / height()  - 0.5f) * (height() / width()));
