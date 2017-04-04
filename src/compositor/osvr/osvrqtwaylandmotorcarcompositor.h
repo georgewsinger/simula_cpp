@@ -54,7 +54,7 @@ public:
     OsvrQtWaylandMotorcarCompositor(QOpenGLWindow *window, QGuiApplication *app, motorcar::Scene *scene);
     ~OsvrQtWaylandMotorcarCompositor();
 
-	static OsvrQtWaylandMotorcarCompositor* create(int argc, char** argv, motorcar::Scene *scene);
+	static OsvrQtWaylandMotorcarCompositor* create(int &argc, char** argv, motorcar::Scene *scene);
 
     virtual int start() override;
 

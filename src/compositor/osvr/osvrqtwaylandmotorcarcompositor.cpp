@@ -195,7 +195,7 @@ OsvrQtWaylandMotorcarCompositor::~OsvrQtWaylandMotorcarCompositor()
 	delete m_render;
 }
 
-OsvrQtWaylandMotorcarCompositor *OsvrQtWaylandMotorcarCompositor::create(int argc, char** argv, motorcar::Scene *scene)
+OsvrQtWaylandMotorcarCompositor *OsvrQtWaylandMotorcarCompositor::create(int &argc, char** argv, motorcar::Scene *scene)
 {
     QGuiApplication *app = new QGuiApplication(argc, argv);
     QScreen *screen = NULL;
