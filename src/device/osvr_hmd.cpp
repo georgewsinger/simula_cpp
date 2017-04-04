@@ -50,6 +50,7 @@ void OsvrHMD::prepareForDraw()
         std::cout << "No pose state!" << std::endl;
         return;
     } else {
+    /*
         std::cout << "Got POSE state: Position = ("
                   << state.translation.data[0] << ", "
                   << state.translation.data[1] << ", "
@@ -59,6 +60,7 @@ void OsvrHMD::prepareForDraw()
                   << osvrQuatGetY(&(state.rotation)) << ", "
                   << osvrQuatGetZ(&(state.rotation)) << ")"
                   << std::endl;
+    */
     }
 
 	glm::vec3 position = glm::vec3(state.translation.data[0], state.translation.data[1], state.translation.data[2]);
@@ -126,10 +128,6 @@ OsvrHMD::OsvrHMD(Skeleton *skeleton, OpenGLContext *glContext, PhysicalNode *par
 	int win_width = dimensions.width, win_height = dimensions.height;
 	printf("Reported hmd size: %d, %d. Default Framebuffer size: %d, %d\n",win_width, win_height, glContext->defaultFramebufferSize().x, glContext->defaultFramebufferSize().y );
 
-
-    float camToDisplayDistance = 0.1f;
-    ViewPoint *vp = new ViewPoint(.01f, 100.0f, this, this, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, camToDisplayDistance)));
-	addViewpoint(vp);
 
 
 }

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     motorcar::Scene *scene = new motorcar::Scene();
 
-    motorcar::Compositor *compositor = motorcar::Compositor::createCompositor(argc, argv, scene) ;
+    motorcar::Compositor *compositor = motorcar::Compositor::createCompositor(argc, argv, scene, motorcar::Compositor::Type::OsvrQtWayland) ;
     scene->setCompositor(compositor);
 
     scene->setWindowManager( new motorcar::WindowManager(scene, compositor->defaultSeat()));
@@ -85,10 +85,11 @@ int main(int argc, char *argv[])
 
     std::cout << "Starting OSVR Compositor "<<std::endl;
 
-
     int result = compositor->start();
 
-    delete scene;
+	delete compositor;
+	delete hmd;
+	delete scene;
 
     return result;
 }

@@ -117,7 +117,7 @@ QtWaylandMotorcarCompositor *QtWaylandMotorcarCompositor::create(int &argc, char
 
 int QtWaylandMotorcarCompositor::start()
 {
-    this->glData()->m_window->showFullScreen();
+    if (!this->glData()->m_window->isVisible()) this->glData()->m_window->showFullScreen();
     this->cleanupGraphicsResources();
     int result = m_app->exec();
     delete m_app;

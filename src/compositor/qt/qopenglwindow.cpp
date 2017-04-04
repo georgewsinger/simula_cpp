@@ -42,14 +42,19 @@
 #include <QTouchEvent>
 
 
-QOpenGLWindow::QOpenGLWindow(const QSurfaceFormat &format, const QRect &geometry)
+QOpenGLWindow::QOpenGLWindow(QOpenGLContext *context, const QSurfaceFormat &format, const QRect &geometry)
     : m_format(format)
+    , m_context(context)
 {
     setSurfaceType(QWindow::OpenGLSurface);
     setGeometry(geometry);
     setFormat(format);
     create();
-    m_context = new QOpenGLContext;
+}
+
+QOpenGLWindow::QOpenGLWindow(const QSurfaceFormat &format, const QRect &geometry)
+    : QOpenGLWindow(new QOpenGLContext(), format, geometry)
+{
     m_context->setFormat(format);
     m_context->create();
 }

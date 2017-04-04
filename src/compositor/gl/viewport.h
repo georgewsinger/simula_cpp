@@ -53,6 +53,7 @@ public:
     float width() const;
     float height() const;
 
+    void update (glm::vec2 normalizedPos, glm::vec2 normalizedSize, Rectangle *bufferGeometry);
 
     //returns resolution of this viewport in pixels, inherited from rectangle
     virtual glm::ivec2 size() override;
