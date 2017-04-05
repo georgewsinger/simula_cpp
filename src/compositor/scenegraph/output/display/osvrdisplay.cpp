@@ -40,7 +40,6 @@
 using namespace motorcar;
 
 
-
 OSVRDisplay::OSVRDisplay(OpenGLContext *glContext, glm::vec2 displayDimensions, PhysicalNode *parent, const glm::mat4 &transform)
     : Display(glContext, displayDimensions, parent, transform)
 
@@ -190,19 +189,25 @@ void OSVRDisplay::DrawWorld(
     OSVRDisplay *display = reinterpret_cast<OSVRDisplay *>(userData);
 
     ViewPoint *viewpoint = display->viewpoints().at(0);
+	glm::mat4 position = glm::translate(
+			glm::mat4(), 
+			glm::vec3(pose.translation.data[0], pose.translation.data[1], pose.translation.data[2])
+	);
+
+    pose.translation.data[0] = pose.translation.data[1] = pose.translation.data[2] = 0;
 
     /// Put the transform into the OpenGL ModelView matrix
     GLdouble glModelView[16];
     osvr::renderkit::OSVR_PoseState_to_OpenGL(glModelView, pose);
 
     // Why invert the matrix? Who knows but it's backwards otherwise
-    glm::mat4 glmModelView( 
+    glm::mat4 orientation( 
         glModelView[0], glModelView[4], glModelView[8], glModelView[12],
         glModelView[1], glModelView[5], glModelView[9], glModelView[13],
         glModelView[2], glModelView[6], glModelView[10], glModelView[14],
         glModelView[3], glModelView[7], glModelView[11], glModelView[15]
     );
-    viewpoint->setWorldTransform(glmModelView);
+    viewpoint->setWorldTransform(position * orientation);
     viewpoint->updateViewMatrix();
 
 }
