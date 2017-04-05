@@ -64,6 +64,8 @@ bool SceneGraphNode::subtreeContains(SceneGraphNode *node)
 
 SceneGraphNode::~SceneGraphNode(){
 
+    std::cout << "Removing SceneGraphNode " << this << " from scenegraph\n";
+
     if (this->parentNode() != NULL)
         this->parentNode()->removeChildNode(this);
 
