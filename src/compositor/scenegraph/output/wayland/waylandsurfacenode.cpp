@@ -240,6 +240,7 @@ void WaylandSurfaceNode::handleFrameBegin(Scene *scene)
 {
     Drawable::handleFrameBegin(scene);
     if(visible()){
+        //std::cout << "handleFrameBegin WaylandSurfaceNode " << this << "\n";
         computeSurfaceTransform(8);
         surface()->prepare();
 

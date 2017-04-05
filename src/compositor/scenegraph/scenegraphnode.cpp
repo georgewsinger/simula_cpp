@@ -64,6 +64,8 @@ bool SceneGraphNode::subtreeContains(SceneGraphNode *node)
 
 SceneGraphNode::~SceneGraphNode(){
 
+    std::cout << "Removing SceneGraphNode " << this << " from scenegraph\n";
+
     if (this->parentNode() != NULL)
         this->parentNode()->removeChildNode(this);
 
@@ -81,6 +83,12 @@ SceneGraphNode::~SceneGraphNode(){
 
 void SceneGraphNode::setParentNode(SceneGraphNode *parent)
 {
+    if(parent == this){
+        std::cout << "ERROR: Tried setting SceneGraphNode parent to itself. Setting parent to NULL instead" << std::endl;
+        this->m_parentNode = NULL;
+        return;
+    }
+
     if(parent == NULL){
         std::cout << "ERROR: Setting SceneGraphNode parent to NULL, behavior is undefined" << std::endl;
     }

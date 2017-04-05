@@ -333,6 +333,8 @@ void QtWaylandMotorcarCompositor::updateCursor()
 
 void QtWaylandMotorcarCompositor::setCursorSurface(QWaylandSurface *surface, int hotspotX, int hotspotY)
 {
+    return; // TODO: Disables cirtual mouse cursor image to avoid a crash. This is temporary.
+
     if(m_defaultSeat->pointer()->cursorNode() == NULL){
         QtWaylandMotorcarSurface *cursorMotorcarSurface =new QtWaylandMotorcarSurface(surface, this, motorcar::WaylandSurface::SurfaceType::CURSOR);
         motorcar::WaylandSurfaceNode *cursorSurfaceNode = this->scene()->windowManager()->createSurface(cursorMotorcarSurface);
@@ -441,9 +443,22 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
         case QEvent::MouseButtonRelease:
         case QEvent::MouseMove: {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
-            glm::vec2 pos(me->globalX(), me->globalY());
+            glm::vec2 pos(me->x(), me->y());
 
-            // TODO: Should pos be projected onto the 3D surfaces here?
+            motorcar::Geometry::Ray ray = display()->worldRayAtDisplayPosition(pos);
+            ray.d *= -1; // Ray seems to face the wrong way without this
+            motorcar::Geometry::RaySurfaceIntersection *inter = this->scene()->intersectWithSurfaces(ray);
+
+            if(inter != NULL && inter->surfaceNode != NULL) {
+                if(inter->surfaceNode->surface() != defaultSeat()->pointerFocus()) {
+                    // TODO: Do we need to generate LEAVE and ENTER events?
+                    defaultSeat()->setPointerFocus(inter->surfaceNode->surface(), inter->surfaceLocalCoordinates);
+                }
+
+                pos = inter->surfaceLocalCoordinates;
+            }
+            else
+                return false; // Ignore clicks outside windows
 
             motorcar::MouseEvent::Event mouseEvent;
             motorcar::MouseEvent::Button button;

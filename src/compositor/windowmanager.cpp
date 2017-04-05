@@ -77,20 +77,20 @@ void WindowManager::destroySurface(WaylandSurface *surface)
     WaylandSurfaceNode *surfaceNode = this->getSurfaceNode(surface);
     if(surfaceNode != NULL){
 
-//        std::vector<motorcar::SceneGraphNode *> subtreeNodes = surfaceNode->nodesInSubtree();
-//        for(motorcar::SceneGraphNode *node : subtreeNodes){
-//            motorcar::WaylandSurfaceNode *subtreeSurfaceNode = dynamic_cast<motorcar::WaylandSurfaceNode *>(node);
-//            if(subtreeSurfaceNode != NULL){
-//                WaylandSurface *subtreeSurface = subtreeSurfaceNode->surface();
+        std::vector<motorcar::SceneGraphNode *> subtreeNodes = surfaceNode->nodesInSubtree();
+        for(motorcar::SceneGraphNode *node : subtreeNodes){
+            motorcar::WaylandSurfaceNode *subtreeSurfaceNode = dynamic_cast<motorcar::WaylandSurfaceNode *>(node);
+            if(subtreeSurfaceNode != NULL){
+                WaylandSurface *subtreeSurface = subtreeSurfaceNode->surface();
 
-//                    std::map<WaylandSurface *, motorcar::WaylandSurfaceNode *>::iterator it = m_surfaceMap.find(subtreeSurface);
-//                    if (it != m_surfaceMap.end()){
-//                        std::cout << "nulling surfaceNode pointer: " << it->second  << " in surface map" <<std::endl;
-//                        it->second = NULL;
-//                    }
+                    std::map<WaylandSurface *, motorcar::WaylandSurfaceNode *>::iterator it = m_surfaceMap.find(subtreeSurface);
+                    if (it != m_surfaceMap.end()){
+                        std::cout << "nulling surfaceNode pointer: " << it->second  << " in surface map" <<std::endl;
+                        it->second = NULL;
+                    }
 
-//            }
-//        }
+            }
+        }
 
         m_surfaceMap.erase (surface);
 
