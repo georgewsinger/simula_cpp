@@ -333,6 +333,8 @@ void QtWaylandMotorcarCompositor::updateCursor()
 
 void QtWaylandMotorcarCompositor::setCursorSurface(QWaylandSurface *surface, int hotspotX, int hotspotY)
 {
+    return; // TODO: Disables cirtual mouse cursor image to avoid a crash. This is temporary.
+
     if(m_defaultSeat->pointer()->cursorNode() == NULL){
         QtWaylandMotorcarSurface *cursorMotorcarSurface =new QtWaylandMotorcarSurface(surface, this, motorcar::WaylandSurface::SurfaceType::CURSOR);
         motorcar::WaylandSurfaceNode *cursorSurfaceNode = this->scene()->windowManager()->createSurface(cursorMotorcarSurface);

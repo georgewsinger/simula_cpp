@@ -81,6 +81,12 @@ SceneGraphNode::~SceneGraphNode(){
 
 void SceneGraphNode::setParentNode(SceneGraphNode *parent)
 {
+    if(parent == this){
+        std::cout << "ERROR: Tried setting SceneGraphNode parent to itself. Setting parent to NULL instead" << std::endl;
+        this->m_parentNode = NULL;
+        return;
+    }
+
     if(parent == NULL){
         std::cout << "ERROR: Setting SceneGraphNode parent to NULL, behavior is undefined" << std::endl;
     }
