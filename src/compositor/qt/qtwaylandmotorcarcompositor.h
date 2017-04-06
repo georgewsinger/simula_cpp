@@ -92,14 +92,15 @@ public:
 
     motorcar::WaylandSurface *getSurfaceFromResource(struct wl_resource *resource) override;
 
+protected slots:
+    virtual void render();
+
 private slots:
     void surfaceDestroyed();
     void surfaceMapped();
     void surfaceUnmapped();
     void surfaceDamaged();
     void surfacePosChanged();
-
-    void render();
 
 protected:
     void surfaceDamaged(QWaylandSurface *surface);
@@ -114,6 +115,10 @@ protected:
 
     void ensureKeyboardFocusSurface(QWaylandSurface *oldSurface);
 
+    QTimer m_renderScheduler;
+
+    motorcar::Scene *m_scene;
+
 private slots:
     void sendExpose();
     void updateCursor();
@@ -122,9 +127,7 @@ private:
     QGuiApplication *m_app;
     QtWaylandMotorcarSeat *m_defaultSeat;
 
-    motorcar::Scene *m_scene;
     OpenGLData *m_glData;
-    QTimer m_renderScheduler;
 
     //Dragging windows around
     QWaylandSurface *m_draggingWindow;

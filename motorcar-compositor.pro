@@ -38,6 +38,7 @@ QMAKE_CXXFLAGS += -std=c++11 -DGL_GLEXT_PROTOTYPES -DMOTORCAR_SHADER_PATH=$$PWD/
 
 
 LIBS += -lGL
+LIBS += -losvrClientKit -losvrRenderManager
 #LIBS += -L $$QTWAYLANDSOURCEPATH/lib
 INCLUDEPATH += $$QTWAYLANDSOURCEPATH/include
 #INCLUDEPATH += $$QTWAYLANDSOURCEPATH/include/QtCompositor/5.3.0/
@@ -61,6 +62,7 @@ HEADERS += \
     src/compositor/qt/qtwaylandmotorcarcompositor.h \
     src/compositor/qt/qopenglwindow.h \
     src/compositor/qt/opengldata.h \
+    src/compositor/osvr/osvrqtwaylandmotorcarcompositor.h \
     src/compositor/geometry.h \
     src/compositor/scenegraph/scenegraphnode.h \
     src/compositor/scenegraph/scenegraph.h \
@@ -117,6 +119,7 @@ SOURCES += \
     src/compositor/qt/qtwaylandmotorcarcompositor.cpp \
     src/compositor/qt/qopenglwindow.cpp \
     src/compositor/qt/opengldata.cpp \
+    src/compositor/osvr/osvrqtwaylandmotorcarcompositor.cpp \
     src/compositor/geometry.cpp \
     src/compositor/scenegraph/scenegraphnode.cpp \
     src/compositor/scenegraph/physicalnode.cpp \

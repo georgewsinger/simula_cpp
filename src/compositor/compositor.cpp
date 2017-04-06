@@ -33,7 +33,7 @@
 **
 ****************************************************************************/
 #include <compositor.h>
-#include <qt/qtwaylandmotorcarcompositor.h>
+#include <osvr/osvrqtwaylandmotorcarcompositor.h>
 using namespace motorcar;
 
 
@@ -42,8 +42,9 @@ Compositor::~Compositor()
     //delete m_display;
 }
 
-Compositor *Compositor::createCompositor(int &argc, char **argv, Scene *scene)
+Compositor *Compositor::createCompositor(int &argc, char **argv, Scene *scene, Type type)
 {
+    if (type == Type::OsvrQtWayland) return qtmotorcar::OsvrQtWaylandMotorcarCompositor::create(argc, argv, scene);
     return qtmotorcar::QtWaylandMotorcarCompositor::create(argc, argv, scene);
 }
 

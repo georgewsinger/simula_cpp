@@ -1,11 +1,11 @@
 /****************************************************************************
+**This file is part of the Motorcar QtWayland Compositor, derived from the
+**QtWayland QWindow Reference Compositor
+**
 **
 ** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
-** This file is part of the Qt Compositor.
-**
-** $QT_BEGIN_LICENSE:BSD$
 ** You may use this file under the terms of the BSD license as follows:
 **
 ** "Redistribution and use in source and binary forms, with or without
@@ -34,33 +34,58 @@
 ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
-** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
-#ifndef QOPENGLWINDOW_H
-#define QOPENGLWINDOW_H
+#ifndef OSVRQWINDOWCOMPOSITOR_H
+#define OSVRQWINDOWCOMPOSITOR_H
 
-#include <QWindow>
-#include <QOpenGLContext>
-#include <QSurfaceFormat>
+#include <qt/qtwaylandmotorcarcompositor.h>
 
-class QOpenGLWindow : public QWindow
+#include <osvr/ClientKit/Context.h>
+#include <osvr/RenderKit/RenderManager.h>
+
+namespace qtmotorcar{
+
+
+class OsvrQtWaylandMotorcarCompositor : public QtWaylandMotorcarCompositor
 {
 public:
-    QOpenGLWindow(QOpenGLContext *context, const QSurfaceFormat &format, const QRect &geometry);
-    QOpenGLWindow(const QSurfaceFormat &format, const QRect &geometry);
+    OsvrQtWaylandMotorcarCompositor(QOpenGLWindow *window, QGuiApplication *app, motorcar::Scene *scene);
+    ~OsvrQtWaylandMotorcarCompositor();
 
-    QOpenGLContext* context() { return m_context; }
-    bool makeCurrent() { return m_context->makeCurrent(this); }
-    void swapBuffers() { m_context->swapBuffers(this); }
+	static OsvrQtWaylandMotorcarCompositor* create(int &argc, char** argv, motorcar::Scene *scene);
+
+    virtual int start() override;
+
+	void registerOsvrWindow(QOpenGLWindow *window);
+
+protected slots:
+    void render() override;
+    void renderPreview();
 
 protected:
-    void touchEvent(QTouchEvent *event);
+    QTimer m_renderPreviewScheduler;
+
+	osvr::clientkit::ClientContext m_context;
+	osvr::renderkit::RenderManager* m_render;
+
+	osvr::renderkit::RenderManager::RenderParams m_params;
 
 private:
-    QOpenGLContext *m_context;
-    QSurfaceFormat m_format;
+	static void drawScene(
+		void* userData
+		, osvr::renderkit::GraphicsLibrary library
+		, osvr::renderkit::RenderBuffer buffers
+		, osvr::renderkit::OSVR_ViewportDescription viewport
+		, OSVR_PoseState pose
+		, osvr::renderkit::OSVR_ProjectionMatrix projection
+		, OSVR_TimeValue deadline
+    );
+
+    QOpenGLWindow *m_osvr_window;
 };
 
-#endif // QOPENGLWINDOW_H
+}
+
+#endif // OSVRQWINDOWCOMPOSITOR_H
