@@ -32,13 +32,38 @@
 **
 **
 ****************************************************************************/
-#ifndef EVENTS_H
-#define EVENTS_H
-
-#include <events/event.h>
-#include <events/mouseevent.h>
-#include <events/keyboardevent.h>
 #include <events/wheelevent.h>
-#include <events/sixdofevent.h>
 
-#endif // EVENTS_H
+using namespace motorcar;
+
+
+
+WheelEvent::WheelEvent(WheelEvent::Orientation orientation, int delta, glm::vec2 localPostion, Seat *seat)
+    :motorcar::Event(seat)
+    ,m_orientation(orientation)
+    ,m_delta(delta)
+    ,m_localPosition(localPostion)
+{
+}
+
+Event::EventType WheelEvent::type() const
+{
+    return EventType::WHEEL;
+}
+WheelEvent::Orientation WheelEvent::orientation() const
+{
+    return m_orientation;
+}
+int WheelEvent::delta()
+{
+    return m_delta;
+}
+glm::vec2 WheelEvent::localPosition() const
+{
+    return m_localPosition;
+}
+
+
+
+
+

@@ -49,7 +49,8 @@ public:
         MOUSE,
         KEYBOARD,
         TOUCH,
-        SIXDOF
+        SIXDOF,
+        WHEEL
     };
 
     virtual EventType type() const = 0;

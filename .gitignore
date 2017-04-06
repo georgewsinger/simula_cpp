@@ -56,3 +56,4 @@ run-rift-hydra-compositor.sh
 run-simple-compositor.sh
 run-osvr-compositor.sh
 run-motorcar-demo-client.sh
+Makefile

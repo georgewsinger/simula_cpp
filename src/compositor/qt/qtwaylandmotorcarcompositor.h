@@ -139,6 +139,12 @@ private:
     int m_cursorHotspotX;
     int m_cursorHotspotY;
 
+    //Camera controls
+    bool m_camIsMoving;
+    glm::vec3 m_camMoveVec;
+    glm::vec2 m_oldMousePos;
+    void moveCamera();
+
     Qt::KeyboardModifiers m_modifiers;
 
     std::map<QWaylandSurface *, QtWaylandMotorcarSurface *> m_surfaceMap;

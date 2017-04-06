@@ -32,13 +32,39 @@
 **
 **
 ****************************************************************************/
-#ifndef EVENTS_H
-#define EVENTS_H
 
+#ifndef WHEELEVENT_H
+#define WHEELEVENT_H
 #include <events/event.h>
-#include <events/mouseevent.h>
-#include <events/keyboardevent.h>
-#include <events/wheelevent.h>
-#include <events/sixdofevent.h>
+#include <glm/glm.hpp>
 
-#endif // EVENTS_H
+namespace motorcar{
+class WheelEvent : public Event
+{
+public:
+    enum Event{
+        SCROLL
+    };
+
+    enum Orientation{
+        HORIZONTAL,
+        VERTICAL
+    };
+
+    WheelEvent(WheelEvent::Orientation orientation, int delta, glm::vec2 localPostion, Seat *seat);
+    EventType type() const override;
+
+
+
+    WheelEvent::Orientation orientation() const;
+    int delta();
+    glm::vec2 localPosition() const;
+
+private:
+    WheelEvent::Orientation m_orientation;
+    float m_delta;
+    glm::vec2 m_localPosition;
+
+};
+}
+#endif // WHEELEVENT_H
