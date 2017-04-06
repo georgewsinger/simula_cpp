@@ -68,6 +68,7 @@ QtWaylandMotorcarCompositor::QtWaylandMotorcarCompositor(QOpenGLWindow *window, 
     , m_cursorSurface(NULL)
     , m_cursorHotspotX(0)
     , m_cursorHotspotY(0)
+    , m_camIsMoving(false)
     , m_modifiers(Qt::NoModifier)
     , m_app(app)
     , m_defaultSeat(NULL)
@@ -376,6 +377,7 @@ void QtWaylandMotorcarCompositor::render()
     cleanupGraphicsResources();
     scene()->prepareForFrame(QDateTime::currentMSecsSinceEpoch());
     sendFrameCallbacks(surfaces());
+    moveCamera();
     scene()->drawFrame();
     scene()->finishFrame();
 
@@ -397,6 +399,30 @@ void QtWaylandMotorcarCompositor::render()
     m_frames++;
 
     m_renderScheduler.start(16);
+}
+
+void QtWaylandMotorcarCompositor::moveCamera() {
+    // Camera debug mode
+    if(m_camIsMoving) {
+        glm::vec4 camPos;
+        camPos *= 0;
+        camPos.w = 1;
+        glm::vec4 delta = camPos;
+        delta.x = m_camMoveVec.x;
+        delta.y = m_camMoveVec.y;
+        delta.z = m_camMoveVec.z;
+
+        const float speed = 0.01;
+        delta *= speed;
+        delta.w /= speed;
+        glm::mat4 trans = display()->transform();
+        //camPos = trans * camPos;
+        //delta = trans * delta;
+        glm::vec3 move = glm::vec3(delta.x/delta.w - camPos.x/camPos.w, delta.y/delta.w - camPos.y/camPos.w,
+                                   delta.z/delta.w - camPos.z/camPos.w);
+        trans = glm::translate(trans, move);
+        display()->setTransform(trans);
+    }
 }
 
 bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
@@ -431,11 +457,39 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
         break;
         case QEvent::KeyPress: {
             QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+            if(ke->key() == Qt::Key::Key_F12) {
+                m_camIsMoving = !m_camIsMoving;
+                std::cout << "Camera debug mode set to " << m_camIsMoving << "\n";
+            }
+            if(m_camIsMoving) {
+                if(ke->key() == Qt::Key::Key_A)
+                    m_camMoveVec.x -= 1;
+                else if(ke->key() == Qt::Key::Key_D)
+                    m_camMoveVec.x += 1;
+                else if(ke->key() == Qt::Key::Key_W)
+                    m_camMoveVec.z -= 1;
+                else if(ke->key() == Qt::Key::Key_S)
+                    m_camMoveVec.z += 1;
+                return false;
+            }
+            else {
+                m_camMoveVec *= 0;
+            }
             this->scene()->windowManager()->sendEvent(motorcar::KeyboardEvent(motorcar::KeyboardEvent::Event::KEY_PRESS, ke->nativeScanCode(), defaultSeat()));
         }
         break;
         case QEvent::KeyRelease: {
             QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+            if(m_camIsMoving) {
+                if(ke->key() == Qt::Key::Key_A)
+                    m_camMoveVec.x += 1;
+                else if(ke->key() == Qt::Key::Key_D)
+                    m_camMoveVec.x -= 1;
+                else if(ke->key() == Qt::Key::Key_W)
+                    m_camMoveVec.z += 1;
+                else if(ke->key() == Qt::Key::Key_S)
+                    m_camMoveVec.z -= 1;
+            }
             this->scene()->windowManager()->sendEvent(motorcar::KeyboardEvent(motorcar::KeyboardEvent::Event::KEY_RELEASE, ke->nativeScanCode(), defaultSeat()));
         }
         break;
@@ -444,6 +498,46 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
         case QEvent::MouseMove: {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
             glm::vec2 pos(me->x(), me->y());
+
+            motorcar::MouseEvent::Event mouseEvent;
+            motorcar::MouseEvent::Button button;
+
+
+            if(me->button() == Qt::LeftButton)
+                button = motorcar::MouseEvent::Button::LEFT;
+            else if(me->button() == Qt::RightButton)
+                button = motorcar::MouseEvent::Button::RIGHT;
+            else if(me->button() == Qt::MiddleButton)
+                button = motorcar::MouseEvent::Button::MIDDLE;
+
+            if(me->type() == QEvent::MouseButtonPress)
+                mouseEvent = motorcar::MouseEvent::Event::BUTTON_PRESS;
+            else if(me->type() == QEvent::MouseButtonRelease)
+                mouseEvent = motorcar::MouseEvent::Event::BUTTON_RELEASE;
+            else if(me->type() == QEvent::MouseMove)
+                mouseEvent = motorcar::MouseEvent::Event::MOVE;
+
+            // Camera debug mode
+            if(m_camIsMoving && mouseEvent == motorcar::MouseEvent::Event::MOVE) {
+                glm::vec2 delta = pos - m_oldMousePos;
+                const float speed = -.001;
+
+                glm::mat4 camTrans = display()->transform();
+
+                //glm::vec4 up4 = glm::inverse(camTrans) * glm::vec4(0,0,1,1);
+                //glm::vec3 up = glm::vec3(up4.x, up4.y, up4.z) / up4.w;
+
+                camTrans = glm::rotate(camTrans, (glm::mediump_float)speed * delta.x, glm::vec3(0,1,0));
+                camTrans = glm::rotate(camTrans, (glm::mediump_float)speed * delta.y, glm::vec3(1,0,0));
+
+                display()->setTransform(camTrans);
+
+                QCursor::setPos(m_oldMousePos.x, m_oldMousePos.y);
+                pos = m_oldMousePos;
+
+                return false;
+            }
+            m_oldMousePos = pos;
 
             motorcar::Geometry::Ray ray = display()->worldRayAtDisplayPosition(pos);
             ray.d *= -1; // Ray seems to face the wrong way without this
@@ -459,23 +553,6 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
             }
             else
                 return false; // Ignore clicks outside windows
-
-            motorcar::MouseEvent::Event mouseEvent;
-            motorcar::MouseEvent::Button button;
-
-            if(me->type() == QEvent::MouseButtonPress)
-                mouseEvent = motorcar::MouseEvent::Event::BUTTON_PRESS;
-            else if(me->type() == QEvent::MouseButtonRelease)
-                mouseEvent = motorcar::MouseEvent::Event::BUTTON_RELEASE;
-            else if(me->type() == QEvent::MouseMove)
-                mouseEvent = motorcar::MouseEvent::Event::MOVE;
-
-            if(me->button() == Qt::LeftButton)
-                button = motorcar::MouseEvent::Button::LEFT;
-            else if(me->button() == Qt::RightButton)
-                button = motorcar::MouseEvent::Button::RIGHT;
-            else if(me->button() == Qt::MiddleButton)
-                button = motorcar::MouseEvent::Button::MIDDLE;
 
             this->scene()->windowManager()->sendEvent(motorcar::MouseEvent(mouseEvent, button, pos, defaultSeat()));
         break;
