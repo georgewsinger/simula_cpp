@@ -480,6 +480,35 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
             this->scene()->windowManager()->sendEvent(motorcar::MouseEvent(mouseEvent, button, pos, defaultSeat()));
         break;
         }
+        case QEvent::Wheel: {
+            QWheelEvent *we = static_cast<QWheelEvent *>(event);
+            glm::vec2 pos(we->x(), we->y());
+
+            motorcar::Geometry::Ray ray = display()->worldRayAtDisplayPosition(pos);
+            ray.d *= -1;
+            motorcar::Geometry::RaySurfaceIntersection *inter = this->scene()->intersectWithSurfaces(ray);
+
+            if(inter == NULL || inter->surfaceNode == NULL || inter->surfaceNode->surface() == NULL)
+                return false; // Ignore events outside all windows
+
+            pos = inter->surfaceLocalCoordinates;
+            float delta = we->delta();
+
+            motorcar::WheelEvent::Orientation ori;
+            switch (we->orientation()) {
+            case Qt::Orientation::Horizontal:
+                ori = motorcar::WheelEvent::Orientation::HORIZONTAL;
+                break;
+            case Qt::Orientation::Vertical:
+                ori = motorcar::WheelEvent::Orientation::VERTICAL;
+                break;
+            default:
+                break;
+            }
+
+            // Sends wheel event to surface under pointer. Ignores current pointer focus. Doesn't change focus.
+            inter->surfaceNode->surface()->sendEvent(motorcar::WheelEvent(ori, delta, pos, defaultSeat()));
+        }
 
         default:
         break;

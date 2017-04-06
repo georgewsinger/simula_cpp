@@ -144,6 +144,20 @@ void QtWaylandMotorcarSurface::sendEvent(const motorcar::Event &event)
             default:
             break;
         }
+    } else if(eventType == motorcar::Event::EventType::WHEEL){
+        motorcar::WheelEvent wheelEvent = dynamic_cast<const motorcar::WheelEvent &>(event);
+        Qt::Orientation ori;
+        switch(wheelEvent.orientation()) {
+        case motorcar::WheelEvent::Orientation::HORIZONTAL:
+            ori = Qt::Orientation::Horizontal;
+            break;
+        case motorcar::WheelEvent::Orientation::VERTICAL:
+            ori = Qt::Orientation::Vertical;
+            break;
+        default:
+            break;
+        }
+        input->sendMouseWheelEvent(ori, wheelEvent.delta());
     }
 }
 
