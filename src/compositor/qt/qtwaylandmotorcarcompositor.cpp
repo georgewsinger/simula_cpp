@@ -334,8 +334,6 @@ void QtWaylandMotorcarCompositor::updateCursor()
 
 void QtWaylandMotorcarCompositor::setCursorSurface(QWaylandSurface *surface, int hotspotX, int hotspotY)
 {
-    return; // TODO: Disables cirtual mouse cursor image to avoid a crash. This is temporary.
-
     if(m_defaultSeat->pointer()->cursorNode() == NULL){
         QtWaylandMotorcarSurface *cursorMotorcarSurface =new QtWaylandMotorcarSurface(surface, this, motorcar::WaylandSurface::SurfaceType::CURSOR);
         motorcar::WaylandSurfaceNode *cursorSurfaceNode = this->scene()->windowManager()->createSurface(cursorMotorcarSurface);
@@ -550,9 +548,24 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
                 }
 
                 pos = inter->surfaceLocalCoordinates;
+                motorcar::WaylandSurfaceNode *cursorNode = defaultSeat()->pointer()->cursorNode();
+
+                cursorNode->setParentNode(inter->surfaceNode);
+                glm::mat4 matrix = glm::mat4();
+                glm::ivec2 size = inter->surfaceNode->surface()->size();
+                glm::ivec2 csize = cursorNode->surface()->size();
+                glm::vec4 lpos = inter->surfaceNode->surfaceTransform()
+                        * glm::vec4((pos.x+csize.x/8)/size.x, (pos.y+csize.y/8)/size.y, .001, 1);
+                matrix = glm::translate(matrix, glm::vec3(lpos));
+                cursorNode->setTransform(matrix);
+
+                cursorNode->setVisible(true);
             }
-            else
+            else {
+                if(defaultSeat() && defaultSeat()->pointer() && defaultSeat()->pointer()->cursorNode())
+                    defaultSeat()->pointer()->cursorNode()->setVisible(false);
                 return false; // Ignore clicks outside windows
+            }
 
             this->scene()->windowManager()->sendEvent(motorcar::MouseEvent(mouseEvent, button, pos, defaultSeat()));
         break;
