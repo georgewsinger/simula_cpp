@@ -63,7 +63,7 @@ QtWaylandMotorcarCompositor::QtWaylandMotorcarCompositor(QOpenGLWindow *window, 
     , m_scene(scene)
     , m_glData(new OpenGLData(window))
     , m_renderScheduler(this)
-    , m_draggingWindow(0)
+    , m_draggingNode(0)
     , m_dragKeyIsPressed(false)
     , m_cursorSurface(NULL)
     , m_cursorHotspotX(0)
@@ -459,6 +459,8 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
                 m_camIsMoving = !m_camIsMoving;
                 std::cout << "Camera debug mode set to " << m_camIsMoving << "\n";
             }
+            if(ke->key() == Qt::Key::Key_Control)
+                m_dragKeyIsPressed = true;
             if(m_camIsMoving) {
                 if(ke->key() == Qt::Key::Key_A)
                     m_camMoveVec.x -= 1;
@@ -478,6 +480,8 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
         break;
         case QEvent::KeyRelease: {
             QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+            if(ke->key() == Qt::Key::Key_Control)
+                m_dragKeyIsPressed = false;
             if(m_camIsMoving) {
                 if(ke->key() == Qt::Key::Key_A)
                     m_camMoveVec.x += 1;
@@ -567,6 +571,38 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
                 return false; // Ignore clicks outside windows
             }
 
+            // Window dragging
+            if(m_dragKeyIsPressed && inter && inter->surfaceNode->surface()
+                    && mouseEvent == motorcar::MouseEvent::Event::BUTTON_PRESS
+                    && button == motorcar::MouseEvent::Button::LEFT) {
+                m_draggingNode = inter->surfaceNode;
+                m_drag_oldPos = glm::vec2(me->x(), me->y());
+                return false;
+            }
+            if(mouseEvent == motorcar::MouseEvent::Event::BUTTON_RELEASE
+                    && button == motorcar::MouseEvent::Button::LEFT) {
+                m_draggingNode = NULL;
+                return false;
+            }
+            if(m_draggingNode
+                    && mouseEvent == motorcar::MouseEvent::Event::MOVE) {
+                motorcar::Geometry::Ray oldray = display()->worldRayAtDisplayPosition(m_drag_oldPos);
+                glm::vec2 drag_newPos = glm::vec2(me->x(), me->y());
+                motorcar::Geometry::Ray newray = display()->worldRayAtDisplayPosition(drag_newPos);
+
+                oldray.d *= inter->t;
+                newray.d *= inter->t;
+
+                glm::mat4 trans = m_draggingNode->transform();
+                glm::mat4 move = glm::mat4();
+                move = glm::translate(move, oldray.d - newray.d);
+                m_draggingNode->setTransform(move * trans);
+
+                m_drag_oldPos = glm::vec2(me->x(), me->y());
+
+                return false;
+            }
+
             this->scene()->windowManager()->sendEvent(motorcar::MouseEvent(mouseEvent, button, pos, defaultSeat()));
         break;
         }
@@ -594,6 +630,21 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
                 break;
             default:
                 break;
+            }
+
+            if(m_dragKeyIsPressed) {
+                motorcar::Geometry::Ray oldray = display()->worldRayAtDisplayPosition(glm::vec2(we->x(), we->y()));
+
+                oldray.d *= inter->t;
+                glm::vec3 newpos = oldray.d;
+                newpos *= 1. + .001 * delta;
+
+                glm::mat4 trans = inter->surfaceNode->transform();
+                glm::mat4 move = glm::mat4();
+                move = glm::translate(move, oldray.d - newpos);
+                inter->surfaceNode->setTransform(move * trans);
+
+                return false;
             }
 
             // Sends wheel event to surface under pointer. Ignores current pointer focus. Doesn't change focus.
