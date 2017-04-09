@@ -115,6 +115,8 @@ protected:
 
     void ensureKeyboardFocusSurface(QWaylandSurface *oldSurface);
 
+    void moveCamera();
+
     QTimer m_renderScheduler;
 
     motorcar::Scene *m_scene;
@@ -143,7 +145,6 @@ private:
     bool m_camIsMoving;
     glm::vec3 m_camMoveVec;
     glm::vec2 m_oldMousePos;
-    void moveCamera();
 
     Qt::KeyboardModifiers m_modifiers;
 

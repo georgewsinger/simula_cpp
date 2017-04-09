@@ -274,9 +274,14 @@ void OsvrQtWaylandMotorcarCompositor::render()
 {
     m_context.update();
 
-	display()->prepareForDraw();
+    display()->prepareForDraw();
+
+    frameStarted();
+    cleanupGraphicsResources();
 
     scene()->prepareForFrame(QDateTime::currentMSecsSinceEpoch());
+    sendFrameCallbacks(surfaces());
+    moveCamera();
     if (m_render->Render(m_params)) {
         m_renderScheduler.start(0);
     } else {
@@ -284,7 +289,7 @@ void OsvrQtWaylandMotorcarCompositor::render()
 	}
     scene()->finishFrame();
 
-	display()->prepareForDraw();
+    display()->finishDraw();
 }
 
 void OsvrQtWaylandMotorcarCompositor::renderPreview()
