@@ -100,17 +100,16 @@ void OSVRController::handleFrameBegin(Scene *scene) {
 			}
 		}
 
-		OSVR_ButtonState button = 1;
+		OSVR_ButtonState button = 0;
 
 		ret = osvrGetButtonState(m_interface.middle.get(), &timestamp, &button);
-		if (button) std::cout << "Left button pressed" << std::endl;
-		m_pointingDevice->setLeftMouseDown(button);
+		m_pointingDevice->setLeftMouseDown(!!button);
 
 		ret = osvrGetButtonState(m_interface.two.get(), &timestamp, &button);
-		m_pointingDevice->setRightMouseDown(button);
+		m_pointingDevice->setRightMouseDown(!!button);
 
 		ret = osvrGetButtonState(m_interface.four.get(), &timestamp, &button);
-		m_pointingDevice->setMiddleMouseDown(button);
+		m_pointingDevice->setMiddleMouseDown(!!button);
 	}
 }
 

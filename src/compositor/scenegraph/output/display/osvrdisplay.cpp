@@ -144,8 +144,8 @@ void OSVRDisplay::SetupEye(
 
     motorcarViewport->update(vpPos, vpSize, display);
 
-	GLdouble glProjection[16];
-	osvr::renderkit::OSVR_Projection_to_OpenGL(glProjection, projectionToUse);
+    GLdouble glProjection[16];
+    osvr::renderkit::OSVR_Projection_to_OpenGL(glProjection, projectionToUse);
 
     glm::mat4 glmProjection = glm::make_mat4(glProjection);
     
@@ -189,7 +189,7 @@ void OSVRDisplay::DrawWorld(
     GLdouble glModelView[16];
     osvr::renderkit::OSVR_PoseState_to_OpenGL(glModelView, pose);
 
-	glm::mat4 transform = glm::inverse(glm::make_mat4(glModelView));
+    glm::mat4 transform = glm::inverse(glm::make_mat4(glModelView));
 
     viewpoint->setWorldTransform(transform);
     viewpoint->updateViewMatrix();
