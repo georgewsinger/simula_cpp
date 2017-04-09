@@ -582,7 +582,6 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
             if(mouseEvent == motorcar::MouseEvent::Event::BUTTON_RELEASE
                     && button == motorcar::MouseEvent::Button::LEFT) {
                 m_draggingNode = NULL;
-                return false;
             }
             if(m_draggingNode
                     && mouseEvent == motorcar::MouseEvent::Event::MOVE) {
