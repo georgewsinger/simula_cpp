@@ -132,9 +132,9 @@ private:
     OpenGLData *m_glData;
 
     //Dragging windows around
-    QWaylandSurface *m_draggingWindow;
+    motorcar::WaylandSurfaceNode *m_draggingNode;
     bool m_dragKeyIsPressed;
-    QPointF m_drag_diff;
+    glm::vec2 m_drag_oldPos;
 
     //Cursor
     QWaylandSurface *m_cursorSurface;
