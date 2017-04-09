@@ -144,15 +144,10 @@ void OSVRDisplay::SetupEye(
 
     motorcarViewport->update(vpPos, vpSize, display);
 
-    GLdouble glProjection[16];
+	GLdouble glProjection[16];
 	osvr::renderkit::OSVR_Projection_to_OpenGL(glProjection, projectionToUse);
 
-    glm::mat4 glmProjection( 
-        glProjection[0], glProjection[1], glProjection[2], glProjection[3],
-        glProjection[4], glProjection[5], glProjection[6], glProjection[7],
-        glProjection[8], glProjection[9], glProjection[10], glProjection[11],
-        glProjection[12], glProjection[13], glProjection[14], glProjection[15]
-    );
+    glm::mat4 glmProjection = glm::make_mat4(glProjection);
     
     viewpoint->overrideProjectionMatrix(glmProjection);
 }
@@ -189,25 +184,14 @@ void OSVRDisplay::DrawWorld(
     OSVRDisplay *display = reinterpret_cast<OSVRDisplay *>(userData);
 
     ViewPoint *viewpoint = display->viewpoints().at(0);
-	glm::mat4 position = glm::translate(
-			glm::mat4(), 
-			glm::vec3(pose.translation.data[0], pose.translation.data[1], pose.translation.data[2])
-	);
-
-    pose.translation.data[0] = pose.translation.data[1] = pose.translation.data[2] = 0;
 
     /// Put the transform into the OpenGL ModelView matrix
     GLdouble glModelView[16];
     osvr::renderkit::OSVR_PoseState_to_OpenGL(glModelView, pose);
 
-    // Why invert the matrix? Who knows but it's backwards otherwise
-    glm::mat4 orientation( 
-        glModelView[0], glModelView[4], glModelView[8], glModelView[12],
-        glModelView[1], glModelView[5], glModelView[9], glModelView[13],
-        glModelView[2], glModelView[6], glModelView[10], glModelView[14],
-        glModelView[3], glModelView[7], glModelView[11], glModelView[15]
-    );
-    viewpoint->setWorldTransform(position * orientation);
+	glm::mat4 transform = glm::inverse(glm::make_mat4(glModelView));
+
+    viewpoint->setWorldTransform(transform);
     viewpoint->updateViewMatrix();
 
 }

@@ -40,6 +40,7 @@
 
 #include <motorcar.h>
 #include <osvr_hmd.h>
+#include <osvr_controller.h>
 
 int main(int argc, char *argv[])
 {
@@ -81,7 +82,12 @@ int main(int argc, char *argv[])
     //display->addViewpoint(new motorcar::ViewPoint( .01f, 100.0f, display, display, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, camToDisplayDistance))));
     //compositor->setDisplay(display);
     //scene->addDisplay(compositor->display());
+	
+	motorcar::OSVRController *leftController = new motorcar::OSVRController("left", scene);
+	motorcar::OSVRController *rightController = new motorcar::OSVRController("right", scene);
 
+	leftController->setPointingDevice(new motorcar::SixDOFPointingDevice(compositor->defaultSeat(), leftController)); 
+	rightController->setPointingDevice(new motorcar::SixDOFPointingDevice(compositor->defaultSeat(), rightController));
 
     std::cout << "Starting OSVR Compositor "<<std::endl;
 
