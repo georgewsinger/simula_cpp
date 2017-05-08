@@ -54,7 +54,7 @@ function build-qtwayland {
 	#Configure
 
 	cd $QT_SRC_DIR
-	./configure -prefix $QT_BUILD_DIR  -debug -confirm-license -opensource -egl -opengl -no-xcb-xlib -no-openssl
+	./configure -prefix $QT_BUILD_DIR  -debug -confirm-license -opensource -egl -opengl -no-openssl
 	check_error $?
 	echo "Please verify that EGL on Desktop OpenGL is configured correctly"
     read -p "Good to Continue? [y/n] " -n 1 -r
