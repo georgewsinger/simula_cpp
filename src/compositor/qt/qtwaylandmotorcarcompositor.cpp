@@ -545,7 +545,7 @@ bool QtWaylandMotorcarCompositor::eventFilter(QObject *obj, QEvent *event)
             ray.d *= -1; // Ray seems to face the wrong way without this
             motorcar::Geometry::RaySurfaceIntersection *inter = this->scene()->intersectWithSurfaces(ray);
 
-            if(inter != NULL && inter->surfaceNode != NULL) {
+            if(inter != NULL && inter->surfaceNode != NULL && defaultSeat()->pointer()->cursorNode() != NULL) {
                 if(inter->surfaceNode->surface() != defaultSeat()->pointerFocus()) {
                     // TODO: Do we need to generate LEAVE and ENTER events?
                     defaultSeat()->setPointerFocus(inter->surfaceNode->surface(), inter->surfaceLocalCoordinates);
