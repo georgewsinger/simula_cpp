@@ -49,10 +49,10 @@ OSVRController::OSVRController(std::string side, PhysicalNode *parent, const glm
 
 	m_interface.tracker = m_context.getInterface("/controller/" + side);
 	m_interface.one = m_context.getInterface("/controller/" + side + "/1");
-	m_interface.two = m_context.getInterface("/controller/" + side + "/2");
+	m_interface.two = m_context.getInterface("/controller/" + side + "/menu");
 	m_interface.three = m_context.getInterface("/controller/" + side + "/3");
-	m_interface.four = m_context.getInterface("/controller/" + side + "/4");
-	m_interface.middle = m_context.getInterface("/controller/" + side + "/middle");
+	m_interface.four = m_context.getInterface("/controller/" + side + "/grip");
+	m_interface.middle = m_context.getInterface("/controller/" + side + "/trackpad/button");
 	m_interface.bumper = m_context.getInterface("/controller/" + side + "/bumper");
 	m_interface.joystick = m_context.getInterface("/controller/" + side + "/joystick/button");
 	m_interface.joystickX = m_context.getInterface("/controller/" + side + "/joystick/x");
@@ -88,7 +88,7 @@ void OSVRController::handleFrameBegin(Scene *scene) {
 	if(m_pointingDevice != NULL){
 		OSVR_AnalogState trigger = 0;
 		ret = osvrGetAnalogState(m_interface.trigger.get(), &timestamp, &trigger);
-		if(trigger > 25){
+		if(trigger > 0.9){ // osvr-vive trigger is between 0 and 1
 			if(!m_triggerDown){
 				m_triggerDown = true;
 				m_pointingDevice->grabSurfaceUnderCursor();
@@ -104,12 +104,17 @@ void OSVRController::handleFrameBegin(Scene *scene) {
 
 		ret = osvrGetButtonState(m_interface.middle.get(), &timestamp, &button);
 		m_pointingDevice->setLeftMouseDown(!!button);
+		//std::cout << "LM " << !!button << std::endl;
 
+		button = 0;
 		ret = osvrGetButtonState(m_interface.two.get(), &timestamp, &button);
 		m_pointingDevice->setRightMouseDown(!!button);
+		//std::cout << "RM " << !!button << std::endl;
 
+		button = 0;
 		ret = osvrGetButtonState(m_interface.four.get(), &timestamp, &button);
 		m_pointingDevice->setMiddleMouseDown(!!button);
+		//std::cout << "MM " << !!button << std::endl;
 	}
 }
 
