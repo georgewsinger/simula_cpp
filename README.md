@@ -9,6 +9,26 @@ Motorcar is free and open source (under the BSD license), and I am very open to 
 
 Doxygen generated class documentation is available in the repository [here](http://htmlpreview.github.io/?https://github.com/evil0sheep/motorcar/blob/stable/doc/html/annotated.html), though it is somewhat sparse.
 
+Status of this project
+======================
+
+simula_cpp is not actively developed. It has been superseded by https://github.com/SimulaVR/Simula
+
+The key differences are:
+
+simula_cpp is a straightforward update of motorcar. The Oculus SDK dependency has been replaced with OSVR and OSVR-Rendermanager, but it still depends on qtwayland 5.5 and thus Qt 5.5 (can be automatically built with the build script).
+
+Simula VR is a more extensive rewrite of motorcar in Haskell, it makes use of libweston and is looking into interfacing with Godot Engine for using its VR rendering and input pipeline as well as integrating the desktop into environments made in Godot. Simula VR is currently using OpenVR directly, but with Godot integration it will be possible to use it with godot_openvr, godot_openhmd, etc.
+
+simula_cpp has several known issues, but it may be useful as a basis for developing a VR wayland compositor using OSVR.
+
+Some of these known issues are:
+
+* the dependency on an old Qt and qtwayland version
+* motion controller input (e.g. mouse click emulation) works in xwayland, but not in native wayland windows
+* no consistent motion controller input mapping in OSVR. The mapping has to be set up in src/device/osvr_controller.cpp if the OSVR plugin does not offer buttons in the form `/controller/left/1`
+* some stability issues remain
+
 Building Motorcar
 =================
 
@@ -52,11 +72,6 @@ A minimal build for VR requires qt, libmotorcar-compositor and osvr-compositor:
  	$ ./build.sh qtwayland libmotorcar-compositor osvr-compositor
 
 The build script requires tar, and unzip to function
-
-OSVR Compositor considerations
-------------------------------
-
-With qt5.5 built with EGL support stock glew may not work in conjunction with OSVR Rendermanager. It may be necessary to build glew with EGL support. As far as we know, glew's Makefile is broken and requires [glew-egl.patch](https://gist.githubusercontent.com/ChristophHaag/33d412950c74e45a19b58b8621f7cfdb/raw/dbced0d4b9b5217df2073d352d58a8ce4c255977/glew-egl.patch) to properly build with EGL support. In the future a fixed glew build may be integrated into the motorcar build script.
 
 Dependencies
 ------------
